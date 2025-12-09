@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BI-AI Flux - Conectamos Dados, Criamos Clareza, Impulsionamos Resultados</title>
+    <meta name="description" content="Consultoria especializada em Business Intelligence, IA e Gestão de Projetos para PMEs. Soluções custo-efetivas com Power BI, automatizações e melhorias contínuas.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00D4FF',
+                        secondary: '#A855F7',
+                        dark: '#0F172A',
+                        light: '#F8FAFC'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'slide-in-left': 'slideInLeft 0.6s ease-out',
+                        'slide-in-right': 'slideInRight 0.6s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideInLeft: {
+                            '0%': { transform: 'translateX(-30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #00D4FF 0%, #A855F7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #00D4FF 0%, #A855F7 100%);
+        }
+
+        .gradient-border {
+            border-image: linear-gradient(135deg, #00D4FF 0%, #A855F7 100%) 1;
+        }
+
+        .blur-circle {
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(135deg, #00D4FF 0%, #A855F7 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .section-appear {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .section-appear.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-counter {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="bg-dark text-gray-100 overflow-x-hidden">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-dark/95 backdrop-blur-md z-50 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <img src="logo.png" alt="BI-AI Flux Logo" class="h-12 w-auto">
+                    <span class="text-xl font-bold gradient-text">BI-AI Flux</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-gray-300 hover:text-primary">Início</a>
+                    <a href="#about" class="nav-link text-gray-300 hover:text-primary">Sobre</a>
+                    <a href="#services" class="nav-link text-gray-300 hover:text-primary">Serviços</a>
+                    <a href="#differentials" class="nav-link text-gray-300 hover:text-primary">Diferenciais</a>
+                    <a href="#target" class="nav-link text-gray-300 hover:text-primary">Público-Alvo</a>
+                    <a href="#contact" class="px-6 py-2 gradient-bg text-white rounded-full hover:opacity-90 transition">Contato</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-300 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 space-y-3">
+                <a href="#home" class="block text-gray-300 hover:text-primary py-2">Início</a>
+                <a href="#about" class="block text-gray-300 hover:text-primary py-2">Sobre</a>
+                <a href="#services" class="block text-gray-300 hover:text-primary py-2">Serviços</a>
+                <a href="#differentials" class="block text-gray-300 hover:text-primary py-2">Diferenciais</a>
+                <a href="#target" class="block text-gray-300 hover:text-primary py-2">Público-Alvo</a>
+                <a href="#contact" class="block px-6 py-2 gradient-bg text-white rounded-full text-center">Contato</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Animated Background -->
+        <div class="absolute inset-0">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-primary rounded-full blur-circle"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-secondary rounded-full blur-circle"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center">
+                <img src="logo.png" alt="BI-AI Flux Logo" class="mx-auto mb-8 h-32 w-auto animate-fade-in">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-slide-up">
+                    <span class="gradient-text">BI-AI Flux</span>
+                </h1>
+                <p class="text-xl md:text-3xl text-gray-300 mb-4 animate-slide-up" style="animation-delay: 0.2s;">
+                    Conectamos Dados. Criamos Clareza.
+                </p>
+                <p class="text-2xl md:text-4xl font-bold gradient-text mb-8 animate-slide-up" style="animation-delay: 0.3s;">
+                    Impulsionamos Resultados.
+                </p>
+                <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-12 animate-slide-up" style="animation-delay: 0.4s;">
+                    Consultoria especializada em Business Intelligence, IA e Gestão de Projetos para PMEs que buscam eficiência sem custos elevados
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style="animation-delay: 0.5s;">
+                    <a href="#services" class="px-8 py-4 gradient-bg text-white rounded-full font-semibold hover:opacity-90 transition transform hover:scale-105">
+                        Conheça Nossos Serviços
+                    </a>
+                    <a href="#contact" class="px-8 py-4 border-2 border-primary text-primary rounded-full font-semibold hover:bg-primary hover:text-white transition transform hover:scale-105">
+                        Fale Conosco
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-primary text-3xl">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 bg-gradient-to-b from-dark to-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="section-appear">
+                    <div class="text-5xl font-bold gradient-text mb-2 stat-counter" data-target="60">0</div>
+                    <p class="text-gray-400">% Redução de Custos</p>
+                </div>
+                <div class="section-appear">
+                    <div class="text-5xl font-bold gradient-text mb-2 stat-counter" data-target="70">0</div>
+                    <p class="text-gray-400">% Menos Tempo em Relatórios</p>
+                </div>
+                <div class="section-appear">
+                    <div class="text-5xl font-bold gradient-text mb-2 stat-counter" data-target="30">0</div>
+                    <p class="text-gray-400">% Entregas Mais Rápidas</p>
+                </div>
+                <div class="section-appear">
+                    <div class="text-5xl font-bold gradient-text mb-2 stat-counter" data-target="40">0</div>
+                    <p class="text-gray-400">% Redução de Ineficiências</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 section-appear">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Sobre a <span class="gradient-text">BI-AI Flux</span>
+                </h2>
+                <div class="w-24 h-1 gradient-bg mx-auto mb-6"></div>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Fluxos de inteligência de negócios impulsionados por IA para sua PME
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="section-appear">
+                    <h3 class="text-3xl font-bold mb-6 gradient-text">Nossa Missão</h3>
+                    <p class="text-gray-300 text-lg leading-relaxed mb-6">
+                        Fornecer suporte integrado e prático em Business Intelligence via Power BI, gestão de projetos, 
+                        melhorias contínuas de processos e automatizações simples com IA, capacitando PMEs a otimizarem 
+                        operações, tomarem decisões data-driven e alcançarem eficiência sustentável sem os custos elevados 
+                        de equipes internas dedicadas.
+                    </p>
+                    <div class="flex items-start space-x-3 mb-4">
+                        <i class="fas fa-check-circle text-primary text-xl mt-1"></i>
+                        <p class="text-gray-300">ROI em 3-6 meses</p>
+                    </div>
+                    <div class="flex items-start space-x-3 mb-4">
+                        <i class="fas fa-check-circle text-primary text-xl mt-1"></i>
+                        <p class="text-gray-300">Soluções escaláveis para PMEs</p>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <i class="fas fa-check-circle text-primary text-xl mt-1"></i>
+                        <p class="text-gray-300">Até 60% mais barato que especialistas internos</p>
+                    </div>
+                </div>
+
+                <div class="section-appear">
+                    <h3 class="text-3xl font-bold mb-6 gradient-text">Nossa Visão</h3>
+                    <p class="text-gray-300 text-lg leading-relaxed mb-6">
+                        Em 5 anos, tornar-se a consultoria referência na América Latina para PMEs em ascensão, 
+                        ajudando 500 empresas a integrarem BI, IA e gestão ágil para reduzir ineficiências operacionais 
+                        em 40% e impulsionar crescimento anual médio de 25%, fomentando um ecossistema de negócios mais 
+                        ágil e inteligente em mercados emergentes como o Brasil.
+                    </p>
+                    <div class="bg-dark/50 border border-gray-700 rounded-lg p-6">
+                        <h4 class="text-xl font-semibold text-primary mb-3">Nossa Meta até 2030</h4>
+                        <ul class="space-y-2 text-gray-300">
+                            <li><i class="fas fa-building text-secondary mr-2"></i>500 empresas impactadas</li>
+                            <li><i class="fas fa-chart-line text-secondary mr-2"></i>25% crescimento médio anual</li>
+                            <li><i class="fas fa-trophy text-secondary mr-2"></i>Referência na América Latina</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value Proposition -->
+            <div class="mt-16 section-appear">
+                <div class="bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/30 rounded-2xl p-8 md:p-12">
+                    <h3 class="text-3xl font-bold mb-6 text-center gradient-text">Proposta de Valor Única</h3>
+                    <p class="text-gray-300 text-lg leading-relaxed text-center max-w-4xl mx-auto">
+                        A PVU da BI-AI Flux reside na <strong class="text-primary">integração acessível e end-to-end</strong> de serviços essenciais: 
+                        combinamos a robustez do Power BI para visualização e análise de dados com gestão de projetos disciplinada, 
+                        melhorias contínuas de processos e automatizações simples com IA. Diferente de consultorias fragmentadas ou 
+                        caros pacotes de big tech, oferecemos uma abordagem <strong class="text-secondary">custo-efetiva</strong> que gera eficiência 
+                        imediata e constrói capacidades internas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-dark relative overflow-hidden">
+        <!-- Background decoration -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 section-appear">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Nossos <span class="gradient-text">Serviços</span>
+                </h2>
+                <div class="w-24 h-1 gradient-bg mx-auto mb-6"></div>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Quatro pilares interconectados para entregar valor prático e mensurável
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                
+                <!-- Service 1: Power BI -->
+                <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 card-hover section-appear">
+                    <div class="w-16 h-16 gradient-bg rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">Business Intelligence com Power BI</h3>
+                    <p class="text-gray-400 mb-6">
+                        Análise de dados acessível usando Power BI como ferramenta principal para democratizar insights 
+                        e transformar dados em decisões acionáveis.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-dashboard text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Dashboards Interativos:</strong> Painéis personalizados para monitoramento em tempo real</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-magnifying-glass-chart text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Análise de KPIs:</strong> Auditorias e análises preditivas para decisões data-driven</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-robot text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Integração com IA:</strong> Alertas automáticos e notificações de anomalias</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <p class="text-sm text-gray-500">
+                            <i class="fas fa-clock text-secondary mr-2"></i>
+                            Redução de 70% no tempo de relatórios
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Service 2: Project Management -->
+                <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 card-hover section-appear">
+                    <div class="w-16 h-16 gradient-bg rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-project-diagram text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">Gestão de Projetos</h3>
+                    <p class="text-gray-400 mb-6">
+                        Execução disciplinada e adaptável usando metodologias comprovadas para alinhar projetos aos 
+                        objetivos de negócio com entregas no prazo.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-tasks text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Planejamento Detalhado:</strong> Gantt charts, definição de escopo e alocação de recursos</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-shield-halved text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Gestão de Riscos:</strong> Rastreamento via KPIs com metodologias PMBOK e Ágil</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-arrows-spin text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Melhorias Contínuas:</strong> Retrospectives e lições aprendidas integradas</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <p class="text-sm text-gray-500">
+                            <i class="fas fa-rocket text-secondary mr-2"></i>
+                            Entregas 30% mais rápidas
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Service 3: Process Improvement -->
+                <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 card-hover section-appear">
+                    <div class="w-16 h-16 gradient-bg rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-gears text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">Melhoria Contínua de Processos</h3>
+                    <p class="text-gray-400 mb-6">
+                        Otimizações iterativas e sustentáveis promovendo eficiência através de ciclos contínuos 
+                        para ganhos cumulativos medidos por BI.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-sitemap text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Mapeamento de Processos:</strong> Análise As-Is e To-Be para otimizações estratégicas</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-chart-gantt text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Metodologias Ágeis:</strong> PDCA, Kaizen com treinamentos para equipes</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-wand-magic-sparkles text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Automação de Tarefas:</strong> Fluxos no Power Automate com sugestões de IA</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <p class="text-sm text-gray-500">
+                            <i class="fas fa-trending-up text-secondary mr-2"></i>
+                            Redução de lead time em até 35%
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Service 4: AI Automation -->
+                <div class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 card-hover section-appear">
+                    <div class="w-16 h-16 gradient-bg rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">Automatizações Simples com IA</h3>
+                    <p class="text-gray-400 mb-6">
+                        IA acessível e não-invasiva para acelerar tarefas cotidianas sem necessidade de infraestruturas 
+                        complexas, complementando BI e gestão.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-lightbulb text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Use Cases de IA:</strong> Chatbots, extração de dados com NLP e Azure Cognitive Services</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-road text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Estratégias de IA:</strong> Roadmaps para integrações leves e predições em KPIs</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-graduation-cap text-primary mr-3 mt-1"></i>
+                            <span class="text-gray-300"><strong>Capacitação:</strong> Treinamentos éticos e governança com compliance LGPD</span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <p class="text-sm text-gray-500">
+                            <i class="fas fa-bolt text-secondary mr-2"></i>
+                            Aceleração de fluxos em 40-60%
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Differentials Section -->
+    <section id="differentials" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 section-appear">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Nossos <span class="gradient-text">Diferenciais</span>
+                </h2>
+                <div class="w-24 h-1 gradient-bg mx-auto mb-6"></div>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Por que escolher a BI-AI Flux para sua transformação digital
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="bg-gradient-to-br from-primary/10 to-transparent border border-primary/30 rounded-xl p-6 card-hover section-appear">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">Integração Multisserviço</h3>
+                    <p class="text-gray-400 text-sm">
+                        Unimos Power BI, gestão de projetos e IA em pacotes coesos. 50% mais custo-efetivo que soluções enterprise.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-secondary/10 to-transparent border border-secondary/30 rounded-xl p-6 card-hover section-appear">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-bold mb-3 text-secondary">Quick Wins</h3>
+                    <p class="text-gray-400 text-sm">
+                        Entregas iniciais em 30 dias com treinamentos inclusos. Enfatizamos autonomia do cliente através de capacitação.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-primary/10 to-transparent border border-primary/30 rounded-xl p-6 card-hover section-appear">
+                    <div class="text-4xl mb-4">🇧🇷</div>
+                    <h3 class="text-xl font-bold mb-3 text-primary">Abordagem Local</h3>
+                    <p class="text-gray-400 text-sm">
+                        Adaptada ao Brasil com conformidade LGPD. Ferramentas acessíveis como Power BI reduzem barreiras em 40%.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-secondary/10 to-transparent border border-secondary/30 rounded-xl p-6 card-hover section-appear">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold mb-3 text-secondary">Medição de Impacto</h3>
+                    <p class="text-gray-400 text-sm">
+                        KPIs integrados para provar valor real. Construímos confiança com ROI mensurável na era da IA.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Methodology -->
+            <div class="mt-16 section-appear">
+                <h3 class="text-3xl font-bold text-center mb-12 gradient-text">Nossa Metodologia</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    
+                    <div class="text-center">
+                        <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-3xl font-bold text-white">1</span>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3 text-primary">Diagnóstico Inicial</h4>
+                        <p class="text-gray-400">
+                            1 semana usando Power BI para audits rápidos e identificação de oportunidades
+                        </p>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-3xl font-bold text-white">2</span>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3 text-secondary">Implementação Iterativa</h4>
+                        <p class="text-gray-400">
+                            2-4 semanas por serviço com protótipos testáveis e ajustes em tempo real
+                        </p>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-3xl font-bold text-white">3</span>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3 text-primary">Acompanhamento Contínuo</h4>
+                        <p class="text-gray-400">
+                            Dashboards compartilhados mensais para ajustes e garantia de resultados sustentáveis
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience Section -->
+    <section id="target" class="py-20 bg-dark">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 section-appear">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Público-Alvo</span>
+                </h2>
+                <div class="w-24 h-1 gradient-bg mx-auto mb-6"></div>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    PMEs em crescimento (1-500 funcionários, receita R$0-R$100M) em setores operacionais intensivos
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                
+                <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 card-hover section-appear">
+                    <div class="text-5xl mb-4">🛒</div>
+                    <h3 class="text-xl font-bold mb-3 gradient-text">Varejo e Comércio</h3>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Lojas físicas/online precisando de dashboards para estoque e vendas
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><i class="fas fa-check text-primary mr-2"></i>Gestão de expansões</li>
+                        <li><i class="fas fa-check text-primary mr-2"></i>IA para chatbots</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 card-hover section-appear">
+                    <div class="text-5xl mb-4">💼</div>
+                    <h3 class="text-xl font-bold mb-3 gradient-text">Serviços e Finanças</h3>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Escritórios e fintechs buscando melhorias em processos fiscais
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><i class="fas fa-check text-primary mr-2"></i>Automações de relatórios</li>
+                        <li><i class="fas fa-check text-primary mr-2"></i>Gestão de compliance</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 card-hover section-appear">
+                    <div class="text-5xl mb-4">🏭</div>
+                    <h3 class="text-xl font-bold mb-3 gradient-text">Manufatura e Logística</h3>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Empresas com fluxos complexos demandando Power BI para tracking
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><i class="fas fa-check text-primary mr-2"></i>Otimizações ágeis</li>
+                        <li><i class="fas fa-check text-primary mr-2"></i>IA para manutenção</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 card-hover section-appear">
+                    <div class="text-5xl mb-4">🏥</div>
+                    <h3 class="text-xl font-bold mb-3 gradient-text">Saúde e Educação</h3>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Clínicas e escolas usando BI para análise de performance
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><i class="fas fa-check text-primary mr-2"></i>Iniciativas digitais</li>
+                        <li><i class="fas fa-check text-primary mr-2"></i>Automação de agendamentos</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Ideal Profile -->
+            <div class="section-appear">
+                <div class="bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 md:p-12">
+                    <h3 class="text-2xl font-bold mb-6 text-center gradient-text">Perfil Ideal do Cliente</h3>
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <i class="fas fa-users text-4xl text-primary mb-3"></i>
+                            <h4 class="font-bold mb-2">Quem</h4>
+                            <p class="text-gray-400 text-sm">Donos de PMEs ou gerentes operacionais com visão estratégica</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-wallet text-4xl text-secondary mb-3"></i>
+                            <h4 class="font-bold mb-2">Desafio</h4>
+                            <p class="text-gray-400 text-sm">Recursos limitados mas necessidade de eficiência e BI</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-map-marker-alt text-4xl text-primary mb-3"></i>
+                            <h4 class="font-bold mb-2">Onde</h4>
+                            <p class="text-gray-400 text-sm">Mercados emergentes como Brasil com crescimento de 35% em Power BI</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-primary/20 to-secondary/20 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        </div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 section-appear">
+                Pronto para Transformar sua <span class="gradient-text">PME</span>?
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto section-appear">
+                Comece hoje sua jornada rumo à eficiência operacional e decisões data-driven
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center section-appear">
+                <a href="#contact" class="px-10 py-4 gradient-bg text-white rounded-full font-semibold text-lg hover:opacity-90 transition transform hover:scale-105">
+                    <i class="fas fa-calendar-check mr-2"></i>Agende uma Consulta Gratuita
+                </a>
+                <a href="mailto:contato@biaiflux.com.br" class="px-10 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/20 transition transform hover:scale-105">
+                    <i class="fas fa-envelope mr-2"></i>Entre em Contato
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 section-appear">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Entre em <span class="gradient-text">Contato</span>
+                </h2>
+                <div class="w-24 h-1 gradient-bg mx-auto mb-6"></div>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Vamos conversar sobre como a BI-AI Flux pode impulsionar seu negócio
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                
+                <!-- Contact Form -->
+                <div class="section-appear">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-400 mb-2">Nome Completo</label>
+                            <input type="text" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition">
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-2">Email</label>
+                            <input type="email" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition">
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-2">Empresa</label>
+                            <input type="text" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition">
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-2">Mensagem</label>
+                            <textarea rows="4" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-4 gradient-bg text-white rounded-lg font-semibold hover:opacity-90 transition transform hover:scale-105">
+                            <i class="fas fa-paper-plane mr-2"></i>Enviar Mensagem
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="section-appear space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 gradient-text">Informações de Contato</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-envelope text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Email</h4>
+                                    <a href="mailto:contato@biaiflux.com.br" class="text-gray-400 hover:text-primary transition">contato@biaiflux.com.br</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone text-secondary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Telefone</h4>
+                                    <a href="tel:+5511999999999" class="text-gray-400 hover:text-secondary transition">+55 11 99999-9999</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold mb-1">Localização</h4>
+                                    <p class="text-gray-400">São Paulo, Brasil</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 gradient-text">Redes Sociais</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 bg-gray-800 border border-gray-700 rounded-lg flex items-center justify-center hover:border-primary hover:bg-primary/10 transition">
+                                <i class="fab fa-linkedin text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-gray-800 border border-gray-700 rounded-lg flex items-center justify-center hover:border-primary hover:bg-primary/10 transition">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-gray-800 border border-gray-700 rounded-lg flex items-center justify-center hover:border-primary hover:bg-primary/10 transition">
+                                <i class="fab fa-facebook text-xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-gray-800 border border-gray-700 rounded-lg flex items-center justify-center hover:border-primary hover:bg-primary/10 transition">
+                                <i class="fab fa-youtube text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/30 rounded-xl p-6">
+                        <h4 class="font-bold text-lg mb-3">📅 Consulta Gratuita</h4>
+                        <p class="text-gray-400 text-sm mb-4">
+                            Agende uma conversa de 30 minutos sem compromisso para discutir os desafios da sua PME
+                        </p>
+                        <a href="#" class="inline-block px-6 py-2 gradient-bg text-white rounded-full text-sm font-semibold hover:opacity-90 transition">
+                            Agendar Agora
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark border-t border-gray-800 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="logo.png" alt="BI-AI Flux Logo" class="h-10 w-auto">
+                        <span class="text-lg font-bold gradient-text">BI-AI Flux</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Conectamos dados, criamos clareza, impulsionamos resultados.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4 text-primary">Serviços</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#services" class="hover:text-primary transition">Power BI</a></li>
+                        <li><a href="#services" class="hover:text-primary transition">Gestão de Projetos</a></li>
+                        <li><a href="#services" class="hover:text-primary transition">Melhoria de Processos</a></li>
+                        <li><a href="#services" class="hover:text-primary transition">Automação com IA</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4 text-primary">Empresa</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#about" class="hover:text-primary transition">Sobre Nós</a></li>
+                        <li><a href="#differentials" class="hover:text-primary transition">Diferenciais</a></li>
+                        <li><a href="#target" class="hover:text-primary transition">Público-Alvo</a></li>
+                        <li><a href="#contact" class="hover:text-primary transition">Contato</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4 text-primary">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Receba insights sobre BI e IA</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Seu email" class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-primary transition">
+                        <button type="submit" class="gradient-bg px-4 py-2 rounded-r-lg hover:opacity-90 transition">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+                <p>&copy; 2025 BI-AI Flux. Todos os direitos reservados.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-primary transition">Política de Privacidade</a>
+                    <a href="#" class="hover:text-primary transition">Termos de Uso</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 gradient-bg rounded-full flex items-center justify-center text-white shadow-lg opacity-0 pointer-events-none transition-opacity hover:opacity-90">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>
